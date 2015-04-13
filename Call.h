@@ -8,10 +8,20 @@
 #ifndef CALL_H_
 #define CALL_H_
 
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
 class Call {
 public:
-	Call();
+	string name;
+	Call(vector<int> nReads, vector<int> nWrites, string name);
+	void printPositionsTest();
 	virtual ~Call();
+private:
+	vector<int> reads;
+	vector<int> writes;
 };
 
 #endif /* CALL_H_ */
