@@ -8,12 +8,7 @@
 #ifndef MEMREADER_H_
 #define MEMREADER_H_
 
-#include <vector>
-#include "Call.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "Global.h"
 
 namespace reading
 {
@@ -27,7 +22,6 @@ namespace reading
 		void printTest();
 		enum posType{read, write, notMem};
 		class MemPosition;
-	private:
 		ifstream * dump;
 		string readName();
 		MemPosition readPosition();

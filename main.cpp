@@ -1,10 +1,19 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "MemReader.h"
+#include "Global.h"
 
 using namespace std;
 using namespace reading;
+
+void testSet()
+{
+	unordered_set<int> set;
+
+	set.insert(1);
+	set.insert(2);
+	set.insert(1);
+
+	for (auto &i: set)
+		cout << i << endl;
+}
 
 int main (int argc, char ** argv)
 {
@@ -17,9 +26,19 @@ int main (int argc, char ** argv)
 
 	MemReader reader(&input);
 
+	cout << "### READER TEST ###" << endl;
 	reader.readDump();
-
 	reader.printTest();
+
+	cout << endl;
+
+	cout << "### DepAnalyst TEST ###" << endl;
+	HashDepAnalyst al(&reader.calls);
+	al.solveDeps();
+	al.printCallDeps();
+
+	//cout << "### SET TESET ###" << endl;
+	//testSet();
 
 	return 0;
 }

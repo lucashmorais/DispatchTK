@@ -8,12 +8,18 @@
 #ifndef HASHDEPANALYST_H_
 #define HASHDEPANALYST_H_
 
-#include "DepAnalyst.h"
+#include "Global.h"
 
-class HashDepAnalyst: public DepAnalyst {
+class HashDepAnalyst:DepAnalyst {
 public:
-	HashDepAnalyst();
+	HashDepAnalyst(vector<Call> *nCalls);
+	void solveDeps();
+	void printCallDeps();
 	virtual ~HashDepAnalyst();
+private:
+	vector<Call> *calls;
+	unordered_map<int, Call *> reads;
+	unordered_map<int, Call *> writes;
 };
 
 #endif /* HASHDEPANALYST_H_ */

@@ -101,13 +101,13 @@ void MemReader::readDump()
 			else
 				writes.push_back(mpos.pos);
 		}
-		calls.push_back(Call(reads, writes, name));
+		calls.push_back(Call(reads, writes, name, calls.size()));
 	}
 }
 
 void MemReader::printTest()
 {
-	for (int i = 0; i < calls.size(); i++)
+	for (unsigned int i = 0; i != calls.size(); i++)
 	{
 		Call &c = calls[i];
 
