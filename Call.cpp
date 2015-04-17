@@ -55,10 +55,3 @@ void Call::printDeps()
 		cout << "\t" << i->name << endl;
 	}
 }
-
-void Call::removeSelfReferences()
-{
-	RAWdeps.erase(this);
-	WAWdeps.erase(this);
-	WARdeps.erase(this);
-}

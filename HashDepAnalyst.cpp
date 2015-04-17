@@ -5,7 +5,7 @@
  *      Author: lucas
  */
 
-#include "HashDepAnalyst.h"
+#include "Global.h"
 
 HashDepAnalyst::HashDepAnalyst(vector<Call> *nCalls) {
 	calls = nCalls;
@@ -30,12 +30,12 @@ void HashDepAnalyst::solveDeps()
 		//cout << "testing raw" << endl;
 		for (unsigned int j = 0; j != c->reads.size(); j++)
 		{
-			int &pos = c->reads[j];
+			const int &pos = c->reads[j];
 			//cout << "testing pos: " << pos << endl;
 
 			if (writes.find(pos) != writes.end())
 			{
-				c->RAWdeps.insert(writes[pos]);
+				c->addRAWDep(writes[pos]);
 			}
 
 			reads[pos] = c;
@@ -43,18 +43,18 @@ void HashDepAnalyst::solveDeps()
 
 		for (unsigned int j = 0; j != c->writes.size(); j++)
 		{
-			int &pos = c->writes[j];
+			const int &pos = c->writes[j];
 
 			//WAW
 			if (writes.find(pos) != writes.end())
 			{
-				c->WAWdeps.insert(writes[pos]);
+				c->addWAWDep(writes[pos]);
 			}
 
 			//WAR
 			if (reads.find(pos) != reads.end())
 			{
-				c->WARdeps.insert(reads[pos]);
+				c->addWARDep(reads[pos]);
 			}
 
 			writes[pos] = c;
