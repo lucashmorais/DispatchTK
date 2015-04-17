@@ -26,16 +26,19 @@ int main (int argc, char ** argv)
 
 	MemReader reader(&input);
 
-	cout << "### READER TEST ###" << endl;
+	//cout << "### READER TEST ###" << endl;
 	reader.readDump();
-	reader.printTest();
+	//reader.printTest();
 
 	cout << endl;
 
-	cout << "### DepAnalyst TEST ###" << endl;
+	//cout << "### DepAnalyst TEST ###" << endl;
 	HashDepAnalyst al(&reader.calls);
 	al.solveDeps();
-	al.printCallDeps();
+	//al.printCallDeps();
+
+	cout << "### Execution Simulation TEST ###" << endl;
+	al.simulateExecution(1000000000);
 
 	//cout << "### SET TESET ###" << endl;
 	//testSet();

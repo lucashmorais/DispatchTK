@@ -15,8 +15,14 @@ public:
 	HashDepAnalyst(vector<Call> *nCalls);
 	void solveDeps();
 	void printCallDeps();
+	void simulateExecution(int meanWaitTime);
+	void asyncWaitAndPrint(Call *p, int meanWaitTime, deque<Call *> readyCalls, int liveCount);
 	virtual ~HashDepAnalyst();
-private:
+//private:
+	default_random_engine rndGen;
+	mutex io_mutex;
+	mutex ct_mutex;
+	mutex rd_mutex;
 	vector<Call> *calls;
 	unordered_map<int, Call *> reads;
 	unordered_map<int, Call *> writes;

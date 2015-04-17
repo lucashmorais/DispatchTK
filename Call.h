@@ -24,6 +24,8 @@ public:
 	unordered_set<Call *> WAWdeps;
 	unordered_set<Call *> WARdeps;
 
+	int depCount = 0;
+
 	//Pointers to Calls that depend on this one
 	unordered_set<Call *> trueDependents;
 	unordered_set<Call *> falseDependents;
@@ -41,19 +43,19 @@ public:
 	inline void addRAWDep(Call *p)
 	{
 		RAWdeps.insert(p);
-		addTrueDependent(p);
+		p->addTrueDependent(this);
 	}
 
 	inline void addWAWDep(Call *p)
 	{
 		WAWdeps.insert(p);
-		addFalseDependent(p);
+		p->addFalseDependent(this);
 	}
 
 	inline void addWARDep(Call *p)
 	{
 		WARdeps.insert(p);
-		addFalseDependent(p);
+		p->addFalseDependent(this);
 	}
 
 	inline void removeSelfReferences()
@@ -62,6 +64,14 @@ public:
 		WAWdeps.erase(this);
 		WARdeps.erase(this);
 	}
+
+	inline bool decrementDepCount()
+	{
+		depCount--;
+		return depCount == 0;
+	}
+
+	void resetDepCount();
 
 	virtual ~Call();
 };

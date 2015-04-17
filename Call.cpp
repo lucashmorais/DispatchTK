@@ -55,3 +55,8 @@ void Call::printDeps()
 		cout << "\t" << i->name << endl;
 	}
 }
+
+void Call::resetDepCount()
+{
+	depCount = RAWdeps.size() + WAWdeps.size() + WARdeps.size();
+}

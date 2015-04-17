@@ -11,6 +11,7 @@
 class TaskDispatcher {
 public:
 	TaskDispatcher();
+
 	virtual ~TaskDispatcher();
 };
 
