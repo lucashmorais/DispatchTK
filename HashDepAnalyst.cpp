@@ -134,8 +134,10 @@ void HashDepAnalyst::simulateExecution(int meanWaitTime)
 		t.join();
 	*/
 
+	meanWaitTime = 100000000;
 	normal_distribution<double> distribution(meanWaitTime, 1);
-	(*calls)[0].simulate(distribution);
+	(*calls)[0].setupDistribution(&distribution);
+	(*calls)[0].simulate();
 }
 
 void HashDepAnalyst::printCallDeps()

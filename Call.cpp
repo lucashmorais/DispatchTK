@@ -13,6 +13,7 @@ Call::Call(vector<int> nReads, vector<int> nWrites, string nName, int index) {
 	name = out.str();
 	reads = nReads;
 	writes = nWrites;
+	distribution = nullptr;
 }
 
 Call::~Call() {
@@ -56,9 +57,9 @@ void Call::printDeps()
 	}
 }
 
-void Call::simulate(normal_distribution<double>& distribution)
+void Call::simulate()
 {
-	int waitTime = (int) distribution(rndGen);
+	int waitTime = (int) (*distribution)(rndGen);
 	cv.wait_for(lck, chrono::nanoseconds(waitTime));
 
 	for (Call *d: wawDependents)

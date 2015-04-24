@@ -26,6 +26,7 @@ public:
 	void printDeps();
 	vector<int> reads;
 	vector<int> writes;
+	normal_distribution<double>* distribution = nullptr;
 
 	//Pointers to Calls that this Call depends on
 	unordered_set<Call *> RAWdeps;
@@ -100,18 +101,26 @@ public:
 		return depCount == 0;
 	}
 
-	inline void resolveDependency(normal_distribution<double>& distribution)
+	inline void resolveDependency(normal_distribution<double>* nDist)
 	{
 		depCount--;
 		cout << name << " is left with " << depCount << " deps." << endl;
 		if (depCount == 0)
 		{
-			simulate(distribution);
+			setupDistribution(nDist);
+			thread t(&Call::simulate, this);
+			t.join();
 		}
 	}
 
-	void simulate(normal_distribution<double>& distribution);
+	inline void setupDistribution(normal_distribution<double>* p)
+	{
+		distribution = p;
+	}
+
+	void simulate();
 	void resetDepCount();
+
 
 	virtual ~Call();
 };
