@@ -3,6 +3,14 @@
 using namespace std;
 using namespace reading;
 
+default_random_engine rndGen;
+mutex io_mutex;
+mutex ct_mutex;
+mutex rd_mutex;
+condition_variable cv;
+mutex mtx;
+unique_lock<mutex> lck(mtx);
+
 void testSet()
 {
 	unordered_set<int> set;

@@ -10,6 +10,14 @@
 
 using namespace std;
 
+extern default_random_engine rndGen;
+extern mutex io_mutex;
+extern mutex ct_mutex;
+extern mutex rd_mutex;
+extern condition_variable cv;
+extern mutex mtx;
+extern unique_lock<mutex> lck;
+
 class Call {
 public:
 	string name;
@@ -28,34 +36,55 @@ public:
 
 	//Pointers to Calls that depend on this one
 	unordered_set<Call *> trueDependents;
-	unordered_set<Call *> falseDependents;
+	unordered_set<Call *> wawDependents;
+	unordered_set<Call *> warDependents;
 
-	inline void addFalseDependent(Call *p)
+	inline void addWAWDependent(Call *p)
 	{
-		falseDependents.insert(p);
+		if (p != this)
+			wawDependents.insert(p);
+	}
+
+	inline void addWARDependent(Call *p)
+	{
+		if (p != this)
+			warDependents.insert(p);
 	}
 
 	inline void addTrueDependent(Call *p)
 	{
-		trueDependents.insert(p);
+		if (p != this)
+			trueDependents.insert(p);
 	}
 
 	inline void addRAWDep(Call *p)
 	{
-		RAWdeps.insert(p);
-		p->addTrueDependent(this);
+		if (p != this)
+		{
+			//cout << name << " raw depends of " << p->name << endl;
+			RAWdeps.insert(p);
+			p->addTrueDependent(this);
+		}
 	}
 
 	inline void addWAWDep(Call *p)
 	{
-		WAWdeps.insert(p);
-		p->addFalseDependent(this);
+		if (p != this)
+		{
+			//cout << name << " waw depends of " << p->name << endl;
+			WAWdeps.insert(p);
+			p->addWAWDependent(this);
+		}
 	}
 
 	inline void addWARDep(Call *p)
 	{
-		WARdeps.insert(p);
-		p->addFalseDependent(this);
+		if (p != this)
+		{
+			//cout << name << " war depends of " << p->name << endl;
+			WARdeps.insert(p);
+			p->addWARDependent(this);
+		}
 	}
 
 	inline void removeSelfReferences()
@@ -71,6 +100,17 @@ public:
 		return depCount == 0;
 	}
 
+	inline void resolveDependency(normal_distribution<double>& distribution)
+	{
+		depCount--;
+		cout << name << " is left with " << depCount << " deps." << endl;
+		if (depCount == 0)
+		{
+			simulate(distribution);
+		}
+	}
+
+	void simulate(normal_distribution<double>& distribution);
 	void resetDepCount();
 
 	virtual ~Call();

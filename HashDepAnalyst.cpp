@@ -60,12 +60,14 @@ void HashDepAnalyst::solveDeps()
 			writes[pos] = c;
 		}
 
-		c->removeSelfReferences();
+		//c->removeSelfReferences();
+		c->resetDepCount();
 	}
 }
 
 void HashDepAnalyst::asyncWaitAndPrint(Call *p, int meanWaitTime, deque<Call *> readyCalls, int liveCount)
 {
+	/*
 	ct_mutex.lock();
 	liveCount++;
 	ct_mutex.unlock();
@@ -101,10 +103,12 @@ void HashDepAnalyst::asyncWaitAndPrint(Call *p, int meanWaitTime, deque<Call *> 
 	io_mutex.lock();
 	cout << "Call " << p->name << " finished executing." << endl;
 	io_mutex.unlock();
+	*/
 }
 
 void HashDepAnalyst::simulateExecution(int meanWaitTime)
 {
+	/*
 	deque<Call *> readyCalls;
 	unordered_set<Call *> issuedCalls;
 	vector<thread> threads;
@@ -128,6 +132,10 @@ void HashDepAnalyst::simulateExecution(int meanWaitTime)
 
 	for (auto &t: threads)
 		t.join();
+	*/
+
+	normal_distribution<double> distribution(meanWaitTime, 1);
+	(*calls)[0].simulate(distribution);
 }
 
 void HashDepAnalyst::printCallDeps()

@@ -30,5 +30,4 @@
 #include "TaskDispatcher.h"
 #include "HashDepAnalyst.h"
 
-
 #endif /* GLOBAL_H_ */

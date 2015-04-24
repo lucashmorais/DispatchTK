@@ -56,6 +56,31 @@ void Call::printDeps()
 	}
 }
 
+void Call::simulate(normal_distribution<double>& distribution)
+{
+	int waitTime = (int) distribution(rndGen);
+	cv.wait_for(lck, chrono::nanoseconds(waitTime));
+
+	for (Call *d: wawDependents)
+	{
+		d->resolveDependency(distribution);
+	}
+
+	for (Call *d: warDependents)
+	{
+		d->resolveDependency(distribution);
+	}
+
+	for (Call *d: trueDependents)
+	{
+		d->resolveDependency(distribution);
+	}
+
+	io_mutex.lock();
+	cout << "Call " << name << " finished executing." << endl;
+	io_mutex.unlock();
+}
+
 void Call::resetDepCount()
 {
 	depCount = RAWdeps.size() + WAWdeps.size() + WARdeps.size();
