@@ -22,11 +22,27 @@ class Call {
 public:
 	string name;
 	Call(vector<int> nReads, vector<int> nWrites, string baseName, int index);
+	Call (const Call & other)
+	{
+		depCount = other.depCount;
+		distribution = other.distribution;
+		name = other.name;
+		RAWdeps = other.RAWdeps;
+		reads = other.reads;
+		trueDependents = other.trueDependents;
+		warDependents = other.warDependents;
+		WARdeps = other.WARdeps;
+		wawDependents = other.wawDependents;
+		WAWdeps = other.WAWdeps;
+		writes = other.writes;
+	}
+
 	void printPositionsTest();
 	void printDeps();
 	vector<int> reads;
 	vector<int> writes;
 	normal_distribution<double>* distribution = nullptr;
+	mutex dep_mutex;
 
 	//Pointers to Calls that this Call depends on
 	unordered_set<Call *> RAWdeps;
@@ -103,15 +119,19 @@ public:
 
 	inline double resolveDependency(normal_distribution<double>* nDist)
 	{
+		dep_mutex.lock();
 		depCount--;
+
 		cout << name << " is left with " << depCount << " deps." << endl;
 		if (depCount == 0)
 		{
 			setupDistribution(nDist);
 			auto future = async(&Call::simulate, this);
+			dep_mutex.unlock();
 			return future.get();
 		}
 
+		dep_mutex.unlock();
 		return 0;
 	}
 
