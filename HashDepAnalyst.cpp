@@ -65,76 +65,8 @@ void HashDepAnalyst::solveDeps()
 	}
 }
 
-void HashDepAnalyst::asyncWaitAndPrint(Call *p, int meanWaitTime, deque<Call *> readyCalls, int liveCount)
-{
-	/*
-	ct_mutex.lock();
-	liveCount++;
-	ct_mutex.unlock();
-
-	cout << "sleep time: " << meanWaitTime << "(ns)" << endl;
-	normal_distribution<double> distribution(meanWaitTime, 1);
-
-	//TODO: Do we really needs these locks here?
-	mutex mtx;
-	unique_lock<mutex> lck(mtx);
-	condition_variable cv;
-
-	int waitTime = (int) distribution(rndGen);
-
-	cv.wait_for(lck, chrono::nanoseconds(waitTime));
-
-	//Tasks depending on the just executed one are now ready for execution
-	for (Call *d: p->falseDependents)
-	{
-		if (d->decrementDepCount())
-		{
-			readyCalls.push_back(d);
-		}
-	}
-	for (Call *d: p->trueDependents)
-	{
-		if (d->decrementDepCount())
-		{
-			readyCalls.push_back(d);
-		}
-	}
-
-	io_mutex.lock();
-	cout << "Call " << p->name << " finished executing." << endl;
-	io_mutex.unlock();
-	*/
-}
-
 void HashDepAnalyst::simulateExecution(int meanWaitTime)
 {
-	/*
-	deque<Call *> readyCalls;
-	unordered_set<Call *> issuedCalls;
-	vector<thread> threads;
-	int liveCount = 0;
-
-	for (Call &p: *calls)
-		p.resetDepCount();
-
-	Call *first = &((*calls)[0]);
-
-	readyCalls.push_back(first);
-	issuedCalls.insert(first);
-
-	while (!readyCalls.empty())
-	{
-		Call * p = readyCalls.front();
-		readyCalls.pop_front();
-
-		threads.push_back(thread(&HashDepAnalyst::asyncWaitAndPrint, this, p, meanWaitTime, readyCalls, liveCount));
-	}
-
-	for (auto &t: threads)
-		t.join();
-	*/
-
-	meanWaitTime = 100000000;
 	normal_distribution<double> distribution(meanWaitTime, 1);
 	(*calls)[0].setupDistribution(&distribution);
 	(*calls)[0].simulate();

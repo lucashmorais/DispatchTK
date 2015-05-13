@@ -101,16 +101,18 @@ public:
 		return depCount == 0;
 	}
 
-	inline void resolveDependency(normal_distribution<double>* nDist)
+	inline double resolveDependency(normal_distribution<double>* nDist)
 	{
 		depCount--;
 		cout << name << " is left with " << depCount << " deps." << endl;
 		if (depCount == 0)
 		{
 			setupDistribution(nDist);
-			thread t(&Call::simulate, this);
-			t.join();
+			auto future = async(&Call::simulate, this);
+			return future.get();
 		}
+
+		return 0;
 	}
 
 	inline void setupDistribution(normal_distribution<double>* p)
@@ -118,7 +120,7 @@ public:
 		distribution = p;
 	}
 
-	void simulate();
+	double simulate();
 	void resetDepCount();
 
 

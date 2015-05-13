@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <future>
 #include <random>
 #include <condition_variable>
 #include <mutex>

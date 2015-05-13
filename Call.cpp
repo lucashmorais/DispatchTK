@@ -57,29 +57,32 @@ void Call::printDeps()
 	}
 }
 
-void Call::simulate()
+double Call::simulate()
 {
 	int waitTime = (int) (*distribution)(rndGen);
 	cv.wait_for(lck, chrono::nanoseconds(waitTime));
+	int expectedWaitTime = waitTime;
 
 	for (Call *d: wawDependents)
 	{
-		d->resolveDependency(distribution);
+		expectedWaitTime += d->resolveDependency(distribution);
 	}
 
 	for (Call *d: warDependents)
 	{
-		d->resolveDependency(distribution);
+		expectedWaitTime += d->resolveDependency(distribution);
 	}
 
 	for (Call *d: trueDependents)
 	{
-		d->resolveDependency(distribution);
+		expectedWaitTime += d->resolveDependency(distribution);
 	}
 
 	io_mutex.lock();
 	cout << "Call " << name << " finished executing." << endl;
 	io_mutex.unlock();
+
+	return expectedWaitTime;
 }
 
 void Call::resetDepCount()
